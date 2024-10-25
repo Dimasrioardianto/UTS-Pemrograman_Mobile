@@ -1,20 +1,40 @@
 package id.ac.polbeng.ardianto.kalkulatoruts
 
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import id.ac.polbeng.ardianto.kalkulatoruts.databinding.ActivityMainBinding
+import kotlin.math.PI
 
 class MainActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityMainBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContentView(R.layout.activity_main)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
+
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        binding.btnCalculate.setOnClickListener {
+            val radius = binding.etRadius.text.toString().toDoubleOrNull()
+            val height = binding.etHeight.text.toString().toDoubleOrNull()
+
+            if (radius != null && height != null) {
+                val volume = PI * radius * radius * height
+                binding.tvResult.text = getString(R.string.result_volume) + "%.2f".format(volume)
+            } else {
+                binding.tvResult.text = getString(R.string.error_invalid_input)
+            }
+        }
+
+        binding.btnCalculateArea.setOnClickListener {
+            val radius = binding.etRadius.text.toString().toDoubleOrNull()
+
+            if (radius != null) {
+                val area = PI * radius * radius
+                binding.tvResult.text = getString(R.string.result_area) + "%.2f".format(area)
+            } else {
+                binding.tvResult.text = getString(R.string.error_invalid_input)
+            }
         }
     }
 }
